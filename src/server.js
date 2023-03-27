@@ -120,18 +120,18 @@ const init = async () => {
       validator: UsersValidator,
     },
   }, {
+    plugin: playlists,
+    options: {
+      service: playlistsService,
+      validator: PlaylistsValidator,
+    },
+  }, {
     plugin: authentications,
     options: {
       authenticationsService,
       usersService,
       tokenManager: TokenManager,
       validator: AuthenticationsValidator,
-    },
-  }, {
-    plugin: playlists,
-    options: {
-      service: playlistsService,
-      validator: PlaylistsValidator,
     },
   }]);
 

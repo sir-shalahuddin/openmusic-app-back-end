@@ -2,7 +2,7 @@ const routes = (handler) => [
   {
     method: 'POST',
     path: '/playlists',
-    handler: handler.postPlaylistsHandler,
+    handler: handler.postPlaylistHandler,
     options: {
       auth: 'openmusicapp_jwt',
     },
