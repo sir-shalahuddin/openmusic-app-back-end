@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 exports.up = (pgm) => {
   pgm.createTable('collaborations', {
     playlist_id: {
@@ -8,6 +6,7 @@ exports.up = (pgm) => {
       references: 'playlists',
       referencesConstraintName: 'playlist_collaborations_fk',
       primaryKey: true,
+      onDelete: 'cascade',
     },
     user_id: {
       type: 'varchar(50)',
@@ -15,6 +14,7 @@ exports.up = (pgm) => {
       references: 'users',
       referencesConstraintName: 'playlists__user_fk',
       primaryKey: true,
+      onDelete: 'cascade',
     },
   });
 };

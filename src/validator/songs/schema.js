@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const Joi = require('joi');
 
 const SongPayloadSchema = Joi.object({

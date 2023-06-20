@@ -1,7 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable linebreak-style */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const bcrypt = require('bcrypt');
@@ -34,7 +31,7 @@ class UsersService {
     return result.rows[0].id;
   }
 
-  async verifyNewUsername({ username }) {
+  async verifyNewUsername(username) {
     const query = {
       text: 'select username from users where username =$1',
       values: [username],

@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 exports.up = (pgm) => {
   pgm.createTable('playlists_songs', {
     playlist_id: {
@@ -7,6 +5,7 @@ exports.up = (pgm) => {
       notNull: true,
       references: 'playlists',
       referencesConstraintName: 'playlists_songs_fk',
+      onDelete: 'cascade',
       primaryKey: true,
     },
     song_id: {
@@ -14,6 +13,7 @@ exports.up = (pgm) => {
       notNull: true,
       references: 'songs',
       referencesConstraintName: 'songs_playlists_fk',
+      onDelete: 'cascade',
       primaryKey: true,
     },
   });

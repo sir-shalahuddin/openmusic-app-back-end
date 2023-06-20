@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 exports.up = (pgm) => {
   pgm.createTable('playlists_song_activities', {
     playlist_id: {
@@ -7,21 +5,22 @@ exports.up = (pgm) => {
       notNull: true,
       references: 'playlists',
       referencesConstraintName: 'playlists_activities_song_fk',
-      primaryKey: true,
+      onDelete: 'cascade',
     },
     song_id: {
       type: 'varchar(50)',
       notNull: true,
       references: 'songs',
       referencesConstraintName: 'song_playlists_activities_fk',
-      primaryKey: true,
+      onDelete: 'cascade',
     },
     user_id: {
       type: 'varchar(50)',
       notNull: true,
-      references: 'songs',
+      references: 'users',
       referencesConstraintName: 'playlists_activities_users_fk',
-      primaryKey: true,
+      onDelete: 'cascade',
+
     },
     action: {
       type: 'varchar(50)',

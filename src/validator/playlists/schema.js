@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const Joi = require('joi');
 
 const PlaylistPayloadSchema = Joi.object({
@@ -8,4 +7,12 @@ const PlaylistPayloadSchema = Joi.object({
 const PlaylistSongsPayloadSchema = Joi.object({
   songId: Joi.string().required(),
 });
-module.exports = { PlaylistPayloadSchema, PlaylistSongsPayloadSchema };
+
+const DeletePlaylistSongsPayloadSchema = Joi.object({
+  songId: Joi.string().required(),
+});
+module.exports = {
+  PlaylistPayloadSchema,
+  PlaylistSongsPayloadSchema,
+  DeletePlaylistSongsPayloadSchema,
+};

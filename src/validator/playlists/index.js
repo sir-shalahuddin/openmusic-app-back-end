@@ -1,5 +1,8 @@
-/* eslint-disable linebreak-style */
-const { PlaylistPayloadSchema, PlaylistSongsPayloadSchema } = require('./schema');
+const {
+  PlaylistPayloadSchema,
+  PlaylistSongsPayloadSchema,
+  DeletePlaylistSongsPayloadSchema,
+} = require('./schema');
 const InvariantError = require('../../exceptions/InvariantError');
 
 const PlaylistsValidator = {
@@ -11,6 +14,12 @@ const PlaylistsValidator = {
   },
   validatePlaylistSongsPayload: (payload) => {
     const validationResult = PlaylistSongsPayloadSchema.validate(payload);
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
+    }
+  },
+  validateDeletePlaylistSongsPayload: (payload) => {
+    const validationResult = DeletePlaylistSongsPayloadSchema.validate(payload);
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }

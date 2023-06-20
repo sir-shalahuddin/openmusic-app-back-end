@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const { AlbumPayloadSchema } = require('./schema');
 const InvariantError = require('../../exceptions/InvariantError');
 
