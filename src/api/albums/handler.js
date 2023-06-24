@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 
 class AlbumsHandler {
-  constructor(service, songsService, validator) {
+  constructor(service, songsService, storageService, validator) {
     this._service = service;
     this._songsService = songsService;
+    this._storageService = storageService;
     this._validator = validator;
   }
 
@@ -54,6 +55,64 @@ class AlbumsHandler {
       status: 'success',
       message: 'Catatan berhasil dihapus',
     };
+  }
+
+  async postUploadAlbumCoverHandler(request, h) {
+    const { cover } = request.payload;
+    this._validator.validateImageHeaders(cover.hapi.headers);
+    const fileLocation = await this._storageService.writeFile(cover, cover.hapi);
+    await this._service.updateCoverUrl(fileLocation);
+    const response = h.response({
+      status: 'success',
+      message: 'Sampul berhasil diunggah',
+    });
+    response.code(201);
+    return response;
+  }
+
+  async postLikeAlbumHandler(request, h) {
+    const { id: albumId } = request.params;
+    const { id: userId } = request.auth.credentials;
+
+    await this._service.getAlbumById(albumId);
+    await this._service.likesAlbum(albumId, userId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Likes berhasil ditambahkan',
+    });
+    response.code(201);
+    return response;
+  }
+
+  async deleteLikeAlbumHandler(request, h) {
+    const { id: albumId } = request.params;
+    const { id: userId } = request.auth.credentials;
+    await this._service.unlikesAlbum(albumId, userId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil Unlikes',
+    });
+    response.code(200);
+    return response;
+  }
+
+  async getLikeAlbumHandler(request, h) {
+    const { id: albumId } = request.params;
+
+    // const likes = await this._service.getLikesAlbum(albumId);
+    const result = await this._service.getAlbumLikes(albumId);
+
+    const response = h.response({
+      status: 'success',
+      data: { likes: parseInt(result.likes, 10) },
+    });
+    if (result.isCache) {
+      h.response(response).header('X-Data-Source', 'cache');
+    }
+    response.code(200);
+    return response;
   }
 }
 

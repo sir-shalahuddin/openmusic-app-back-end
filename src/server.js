@@ -38,16 +38,28 @@ const CollaborationsValidator = require('./validator/collaborations');
 const activities = require('./api/activities');
 const ActivitiesService = require('./services/postgres/ActivitiesService');
 
+// Exports
+// eslint-disable-next-line no-underscore-dangle
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
+// S3 Storage
+const StorageService = require('./services/S3/StorageService');
+
 const ClientError = require('./exceptions/ClientError');
+const CacheService = require('./services/redis/CacheService');
 
 const init = async () => {
-  const albumsService = new AlbumsService();
+  const cacheService = new CacheService();
+  const albumsService = new AlbumsService(cacheService);
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const playlistsService = new PlaylistsService();
   const collaborationsService = new CollaborationsService();
   const activitiesService = new ActivitiesService();
+  const storageService = new StorageService();
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -111,6 +123,7 @@ const init = async () => {
     options: {
       service: albumsService,
       songsService,
+      storageService,
       validator: AlbumsValidator,
     },
   }, {
@@ -149,6 +162,14 @@ const init = async () => {
       usersService,
       tokenManager: TokenManager,
       validator: AuthenticationsValidator,
+    },
+
+  }, {
+    plugin: _exports,
+    options: {
+      service: ProducerService,
+      playlistsService,
+      validator: ExportsValidator,
     },
   }]);
 
